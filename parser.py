@@ -21,6 +21,10 @@ class Parser:
         self.iterator = 0
         self.token = self.types[self.iterator]
 
+    def Error(self):
+        self.clear_tables()
+        raise SyntaxError(self.values[self.iterator])
+
     def next_token(self):
         if(self.iterator==len(self.types)-1):
             return False
@@ -28,14 +32,15 @@ class Parser:
         self.token=self.types[self.iterator]
         return True
 
-    def match(self,token):
+    def match(self,token, nonTerminal=False):
         if self.token==token:
             if not self.next_token():
-                return False
+                if nonTerminal:
+                    self.Error()
+                else: return False
             return True
         else:
-            self.clear_tables()
-            raise SyntaxError(self.token)
+            self.Error()
 
     def stmt_sequence(self):
         start_node = Node('stmt')
@@ -72,8 +77,7 @@ class Parser:
         elif self.token in ['end','until','else','comment']:
             return None
         else:
-            self.clear_tables()
-            raise SyntaxError(self.token)
+            self.Error()
 
     def if_stmt(self):
         if_node=Node(self.values[self.iterator])
@@ -116,33 +120,21 @@ class Parser:
         left_node=self.term()
         while self.token=='+' or self.token=='-':
             op_node = Node(self.values[self.iterator])
-            self.addop()
+            self.match(self.token, nonTerminal=True)
             op_node.set_children(left_node)
             op_node.set_children(self.term())
             left_node = op_node
         return left_node
 
-    def addop(self):
-        if self.token=='+':
-            self.match('+')
-        elif self.token=='-':
-            self.match('-')
-
     def term(self):
         right_node = self.factor()
         while self.token=='*' or self.token=='/':
             op_node = Node(self.values[self.iterator])
-            self.mulop()
+            self.match(self.token, nonTerminal=True)
             op_node.set_children(right_node)
             right_node = op_node
             right_node.set_children(self.factor())
         return right_node
-
-    def mulop(self):
-        if self.token=='*':
-            self.match('*')
-        elif self.token=='/':
-            self.match('/')
 
     def factor(self):
         if self.token=='(':
@@ -219,8 +211,7 @@ class Parser:
             print('success')
             return self.nodes_table, self.edges_table
         elif self.iterator<len(self.types):
-            self.clear_tables()
-            raise SyntaxError(self.token)
+            self.Error()
 
     def clear_tables(self):
         self.nodes_table.clear()
