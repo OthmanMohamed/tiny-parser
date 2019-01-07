@@ -1,4 +1,5 @@
 # Tiny Parser
+##### Generating syntax tree of code in *tiny language*
 
 1. download dependencies with pip:
 `pip install -r requirements.txt`
