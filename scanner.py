@@ -8,7 +8,7 @@ class Scanner:
         groups = [
             r'(?P<comment>(?<={)[^{}]*(?=}))',
             r'(?P<reserved>if|then|else|end|repeat|until|read|write)',
-            r'(?P<number>\-?[0-9]+)',
+            r'(?P<number>[0-9]+)',
             r'(?P<symbol>[\+\-\*\/=\<();])',
             r'(?P<assign>:=)',
             r'(?P<identifier>[a-zA-Z]+)',

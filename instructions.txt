@@ -1,0 +1,6 @@
+• write your code in a file and call it "input.txt" 
+• save the file in the same directory as the project exe
+• There is already a saved test input in the input.txt file
+• run the project "either from the exe or the main.py"
+• All source codes and screenshots from the program are in the "codes and screenshots" folder
+• you will see the console with "successful" or "error" message and the parse tree will be drawn
